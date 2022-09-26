@@ -36,7 +36,7 @@ routes.put('/list', listaController.put);
 //deletar lista
 routes.delete('/list/:id', listaController.delete);
 
-/*CRUD de itens*/
+/*CRUD dos itens da lista*/
 
 //criar item
 routes.post('/item', itemController.post);

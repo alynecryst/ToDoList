@@ -30,17 +30,32 @@ class itemController {
     async get(req, res) {
         try {
             const { id } = req.params;
-            const result = await firestore.collection('item').doc(id).get();
 
-            const item = {
-                id: result.id,
-                descricao: result.data().descricao,
-                check: result.data().check,
-                delete: result.data().delete,
-                id_lista: result.data().id_lista
+            if (!id) {
+                return res.status(400).json({ message: 'Dados inválidos! Por favor informar o ID da lista.' });
             }
 
-            res.status(200).json(item);
+            const arrayItens = {
+                itens: []
+            }
+
+
+            const result = await firestore.collection('item').where('id_lista', "==", id).get();
+
+            result.forEach((doc) => {
+                var item = {
+                    id: doc.id,
+                    descricao: doc.data().descricao,
+                    check: doc.data().check,
+                    delete: doc.data().delete,
+                    id_lista: doc.data().id_lista
+                }
+                arrayItens.itens.push(item);
+            });
+
+
+
+            res.status(200).json(arrayItens);
         } catch (error) {
             res.status(500).json(error);
         }
